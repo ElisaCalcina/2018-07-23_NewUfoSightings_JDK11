@@ -47,6 +47,29 @@ public class FXMLController {
     @FXML
     void doCreaGrafo(ActionEvent event) {
 
+    	String giorni= txtxG.getText();
+    	Integer giorniI=0;
+    	try {
+    		giorniI=Integer.parseInt(giorni);
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Devi inserire un numero");
+    	}
+    	
+    	String anno= this.txtAnno.getText();
+    	Integer annoI=0;
+    	try {
+    		annoI=Integer.parseInt(anno);
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Devi inserire un numero");
+    	}
+    	
+    	if(giorniI>=1 && giorniI<=180 && annoI>=1906 && annoI<=2014) {
+    		this.model.creaGrafo(annoI, giorniI);
+    		txtResult.appendText("Grafo creato!\n");
+    		txtResult.appendText("#vertici: "+ this.model.nVertici()+"\n");
+    		txtResult.appendText("#archi: "+ this.model.nArchi()+"\n");
+
+    	}
     }
 
     @FXML
