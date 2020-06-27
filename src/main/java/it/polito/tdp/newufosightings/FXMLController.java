@@ -1,9 +1,12 @@
 package it.polito.tdp.newufosightings;
 
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.newufosightings.model.Adiacenze;
 import it.polito.tdp.newufosightings.model.Model;
+import it.polito.tdp.newufosightings.model.State;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -33,7 +36,7 @@ public class FXMLController {
     private Button btnSelezionaAnno;
 
     @FXML
-    private ComboBox<?> cmbBoxForma;
+    private ComboBox<String> cmbBoxForma;
 
     @FXML
     private Button btnCreaGrafo;
@@ -49,12 +52,48 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	txtResult.clear();
+    	
+    	Integer anno=Integer.parseInt(txtAnno.getText());
+    	
+    	String forma= this.cmbBoxForma.getValue();
+    	if(forma==null) {
+    		txtResult.appendText("devi selezionare una forma");
+    		return;
+    	}
+    	
+    	this.model.creaGrafo(anno, forma);
+    	
+    	txtResult.appendText("Grafo creato\n");
+    	txtResult.appendText("#vertici: "+ this.model.nVertici()+"\n");
+    	txtResult.appendText("#archi: "+ this.model.nArchi()+"\n");
+    	
+    	txtResult.appendText("Per ogni stato, peso adiacenti:\n");
+    	
+    	for(Adiacenze a: this.model.pesoVicini()) {
+    		txtResult.appendText(a.toString()+"\n");
+    	}
+    	
     }
 
     @FXML
     void doSelezionaAnno(ActionEvent event) {
-
+    	txtResult.clear();
+    	String anno= txtAnno.getText();
+    	int annoI=0;
+    	
+    	try {
+    		annoI=Integer.parseInt(anno);
+    	}catch(NumberFormatException e) {
+    		txtResult.appendText("Devi inserire un anno");
+    	}
+    	if(annoI>=1910 && annoI<=2014) {
+    		this.cmbBoxForma.getItems().addAll(this.model.getForme(annoI));
+    	}else {
+    		txtResult.appendText("Devi inserire un anno tra 1910 e 2014");
+    	}
+    	
+    	
     }
 
     @FXML
@@ -77,5 +116,6 @@ public class FXMLController {
 
 	public void setModel(Model model) {
 		this.model = model;
+		
 	}
 }
