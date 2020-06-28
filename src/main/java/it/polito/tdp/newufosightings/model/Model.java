@@ -56,8 +56,9 @@ public class Model {
 
 	public List<Adiacenze> pesoVicini(){
 		List<Adiacenze> result= new ArrayList<>();
-		int peso=0;
+		
 		for(State s: idMap.values()) {
+			int peso=0;
 		List<State> vicini= Graphs.neighborListOf(grafo, s);
 			for(State v: vicini) {
 				peso+=this.grafo.getEdgeWeight(this.grafo.getEdge(s,v));
